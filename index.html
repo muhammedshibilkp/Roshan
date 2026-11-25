@@ -215,6 +215,84 @@ section{padding:60px 0}}
 .hero .role-line{font-size:1.15rem}
 .role-row h3{font-size:1.2rem}}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.status-pill i,.hero::after,.hero h1 em{animation:none}}
+
+/* ===== MOBILE-FIRST IMPROVEMENTS (phone use) ===== */
+.menu-btn{display:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:transparent;cursor:pointer;flex-shrink:0;align-content:center;justify-items:center;gap:4px;-webkit-tap-highlight-color:transparent}
+.menu-btn span{display:block;width:18px;height:2px;border-radius:2px;background:var(--ink);transition:transform .25s,opacity .25s}
+nav.open .menu-btn span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+nav.open .menu-btn span:nth-child(2){opacity:0}
+nav.open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.nav-links a.nav-contact{display:none}
+input,button{font-size:16px}
+@media (max-width:900px){
+ nav .wrap{gap:12px}
+ .menu-btn{display:grid}
+ .nav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:var(--bg);border-bottom:1px solid var(--line);padding:6px 18px 14px;font-size:1rem;box-shadow:0 18px 30px rgba(0,0,0,.12)}
+ nav.open .nav-links{display:flex}
+ .nav-links a{padding:15px 4px;border-bottom:1px solid var(--line);color:var(--ink)}
+ .nav-links a:last-child{border-bottom:0}
+ .nav-links a::after{display:none}
+ .portrait-frame{order:-1;max-width:320px;width:100%}
+ .hero .intro{max-width:none}
+}
+@media (max-width:600px){
+ body{font-size:15.5px}
+ .wrap{padding:0 16px}
+ nav .wrap{--nav-height:60px}
+ .brand{font-size:.98rem;gap:10px;min-width:0}
+ .brand{white-space:nowrap}
+ .cta-btn{display:none}
+ .nav-links a.nav-contact{display:block;color:var(--emerald);font-weight:700}
+ section{padding:44px 0}
+ .section-head{margin-bottom:28px}
+ .hero .wrap{padding-top:32px;padding-bottom:40px;gap:28px}
+ .portrait-frame{max-width:270px;padding:10px;border-radius:22px}
+ .portrait-frame::after{inset:4px;border-radius:19px}
+ .portrait-frame img{border-radius:14px}
+ .hero h1{font-size:2.3rem;margin:16px 0 8px}
+ .hero .role-line{font-size:1.1rem;margin-bottom:12px}
+ .status-pill{font-size:.64rem;padding:7px 14px}
+ .hero-actions{flex-direction:column;gap:10px;margin-top:24px}
+ .hero-actions .btn{width:100%;justify-content:center;min-height:50px}
+ .credentials .wrap{grid-template-columns:1fr 1fr}
+ .cred-item{padding:18px 12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+ .cred-item:nth-child(odd){padding-left:0}
+ .cred-item:nth-child(2n){border-right:none}
+ .cred-item:nth-child(3),.cred-item:nth-child(4){border-bottom:none}
+ .cred-item b{font-size:1.45rem}
+ .cred-item span{font-size:.72rem;line-height:1.4;display:block}
+ .announcement-grid{gap:24px}
+ .announcement-grid blockquote{font-size:1.25rem;padding-left:16px}
+ .journey-card{padding:22px}
+ .journey-card .num{font-size:2.2rem;right:18px;top:12px}
+ .journey-card h3{font-size:1.2rem;padding-right:40px}
+ .research-grid{gap:30px}
+ .chip{padding:9px 16px;font-size:.85rem}
+ .role-row{gap:14px;padding:20px 0}
+ .role-row .num{font-size:1.1rem}
+ .mission-card{padding:24px}
+ .book-card{padding:16px}
+ .video-tile{min-height:210px}
+ .play-btn{width:64px;height:64px;font-size:1.4rem}
+ .press-card{padding:18px 20px}
+ .award-card{padding:20px;gap:16px}
+ .award-card .award-icon{width:48px;height:48px}
+ .gallery-grid{grid-auto-rows:120px;gap:10px}
+ .subscribe-banner{padding:28px 20px;border-radius:22px;gap:24px}
+ .subscribe-form input,.subscribe-form button{min-height:50px}
+ footer .wrap{flex-direction:column;gap:18px}
+ .books-grid{gap:14px}
+}
+@media (max-width:360px){
+ .brand{font-size:.9rem}
+ .hero h1{font-size:2.05rem}
+ .cred-item b{font-size:1.3rem}
+}
+/* touch devices: no sticky hover lifts */
+@media (hover:none){
+ .journey-card:hover,.mission-card:hover,.book-card:hover,.press-card:hover,.award-card:hover,.gallery-tile:hover,.video-tile:hover,.portrait-frame:hover,.btn:hover,.chip:hover{transform:none}
+ .role-row:hover{padding-left:0}
+}
 </style>
 </head>
 <body>
@@ -230,8 +308,10 @@ section{padding:60px 0}}
 <a href="#media">Media</a>
 <a href="#awards">Awards</a>
 <a href="#gallery">Gallery</a>
+<a class="nav-contact" href="#contact">Contact Office</a>
 </div>
 <a class="cta-btn" href="#contact">Contact Office</a>
+<button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
 </div>
 </nav>
 
@@ -444,6 +524,11 @@ var observer=new IntersectionObserver(function(entries){entries.forEach(function
 reveals.forEach(function(el){observer.observe(el);});
 var nav=document.getElementById('navbar');
 window.addEventListener('scroll',function(){if(window.scrollY>20){nav.classList.add('scrolled');}else{nav.classList.remove('scrolled');}},{passive:true});
+var mb=document.getElementById('menuBtn');
+if(mb){
+ mb.addEventListener('click',function(){var o=nav.classList.toggle('open');mb.setAttribute('aria-expanded',o?'true':'false');mb.setAttribute('aria-label',o?'Close menu':'Open menu');});
+ document.querySelectorAll('.nav-links a').forEach(function(a){a.addEventListener('click',function(){nav.classList.remove('open');mb.setAttribute('aria-expanded','false');});});
+}
 })();
 </script>
 </body>
